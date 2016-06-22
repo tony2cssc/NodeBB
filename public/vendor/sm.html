@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>扫码登录</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<script type="text/javascript" src="https://oapi.fosun.com/m/js/fosun_oapi_login-2.0.0_v2.js"> </script>
+		<script type="text/javascript" src="http://jz.fosun.com/vendor/jquery/js/jquery.js"> </script>
+		<style>
+			body{
+				margin: 0px;
+				padding: 0px;
+				background-color: #54B2B7;
+				font-family: "microsoft yahei";
+				color:#fff;
+			}
+			.content{
+				text-align: center;
+				padding-top: 10%;
+			}
+			.head_img{
+				height: 100px;
+				width: 100px;
+				border-radius: 50%;
+				border: 5px solid #fff;
+				margin-bottom: 15px;
+			}
+			.login_name{
+				font-size: 19px;
+				margin-bottom: 25px;
+			}
+			.login_btn{
+				display: inline-block;
+				margin-bottom: 0;
+				font-weight: normal;
+				text-align: center;
+				vertical-align: middle;
+				-ms-touch-action: manipulation;
+				touch-action: manipulation;
+				cursor: pointer;
+				background-image: none;
+				border: 1px solid transparent;
+				white-space: nowrap;
+				padding: 6px 12px;
+				font-size: 14px;
+				line-height: 1.42857143;
+				border-radius: 4px;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				color: #fff;
+				background-color: #2196f3;
+				border-color: #0d8aee;
+				font-family: "microsoft yahei";
+				width: 50%;
+			}
+		</style>
+	</head>
+	<body onload="RunOnBeforeUnload()">
+	
+	
+			<div class="content">
+				<div>
+					<img class="head_img" src="default_avatar.png" />
+				</div>
+				<div class="login_name"><span id="user_name">xx</span>,您好</div>
+				<button class="login_btn" onclick="sm_login()">确认登录</button>
+				<br />
+				<span id="login_success" style="display: none;margin-top: 25px;">登录成功,请关闭本页面</span>
+			</div>
+
+		<script>
+		var userAgent = navigator.userAgent.toLowerCase();
+		var email;
+		$(function(){
+			if(isPC()){
+				$("html").remove();
+				alert("请不要用PC访问本页面");
+				return;
+			}
+			if(userAgent.indexOf('dingtalk')==-1){
+				alert("抱歉,自动登录只支持钉钉");
+				$("html").remove();
+				return;
+			}
+			fosun_oapi_login. getDDAccount (function(user){
+				var a=user.fullname;
+				if(/.*[\u4e00-\u9fa5]+.*$/.test(a)){
+					a=a.split(' ');
+					a=a[a.length-1];
+				}
+				email=user.email;
+				if(!email){
+					email=user.mobile1+"@fosun.com";
+				}
+				$("#user_name").html(a);
+				if(user.avatar){
+					$(".head_img").attr("src",user.avatar);
+				}
+			})
+		});
+        function getQueryString(name) { 
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+			var r = window.location.search.substr(1).match(reg); 
+			if (r != null) return unescape(r[2]); return null; 
+		}
+        
+        function isPC() {
+		    var userAgentInfo = navigator.userAgent;
+		    var Agents = ["Android", "iPhone",
+		                "SymbianOS", "Windows Phone",
+		                "iPad", "iPod"];
+		    var flag = true;
+		    for (var v = 0; v < Agents.length; v++) {
+		        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+		            flag = false;
+		            break;
+		        }
+		    }
+		    return flag;
+		}
+        
+        function sm_login(){
+        	fosun_oapi_login. getDDAccount (function(user){
+				var timestamp = getQueryString("timestamp");
+				if(!timestamp){
+					alert("获取参数失败");
+					return;
+				}
+				var a=user.fullname;
+				if(/.*[\u4e00-\u9fa5]+.*$/.test(a)){
+					a=a.split(' ');
+					a=a[a.length-1];
+				}
+				email=user.email;
+				if(!email){
+					email=user.mobile1+"@fosun.com";
+				}
+				$.ajax({
+					type:"post",
+					url:"http://jz.fosun.com/api/ns/smlogin",
+					data:{
+						'username': a,
+						'email': email,
+						'picture': user.avatar,
+						'fullname': user.fullname,
+						'timestamp':timestamp
+					},
+					success:function(data){
+						if(data){
+							$(".login_btn").hide();
+							$("#login_success").show();
+						}else{
+							alert("用户检测失败！");
+						}
+					},
+					error:function(){
+						alert("网络异常");
+					}
+				});
+			})
+        }
+        
+        function RunOnBeforeUnload() {window.onbeforeunload = function(){ return '本页面禁止刷新'; } }
+	</script>
+	</body>
+	
+</html>
