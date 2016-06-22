@@ -63,7 +63,7 @@
 			});
 
 			router.post('/register', Auth.middleware.applyCSRF, Auth.middleware.applyBlacklist, controllers.authentication.register);
-			router.post('/login', Auth.middleware.applyCSRF, Auth.middleware.applyBlacklist, controllers.authentication.login);
+			router.post('/login', controllers.authentication.login);
 			router.post('/logout', Auth.middleware.applyCSRF, controllers.authentication.logout);
 
 			hotswap.replace('auth', router);
