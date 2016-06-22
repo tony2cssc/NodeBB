@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app='vote'>
+<head>
+    <title>当IT女神，赢ClubMed大奖</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet"  href="css/star.css" type="text/css">
+    <link rel="stylesheet"  href="css/iosOverlay.css" type="text/css">
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/layer.js" type="text/javascript"></script>
+    <script src="js/spin.min.js" type="text/javascript"></script>
+    <script src="js/iosOverlay.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://oapi.fosun.com/m/js/fosun_oapi_login-2.0.0_v2.js"> </script>
+    <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script src="https://cdn.wilddog.com/sdk/js/current/wilddog.js"></script>
+    <script src="https://cdn.wilddog.com/libs/wild-angular/0.0.1/wild-angular.min.js"></script>
+    <script src="js/starbeifen.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="act"  ng-controller='ivote'>
+    <img ng-if="!languageEn" src="http://o7em07k23.bkt.clouddn.com/votezh.jpg" class="actbanner" />
+    <img ng-if="languageEn" src="http://o7em07k23.bkt.clouddn.com/voteen.jpg" class="actbanner" />
+    <div class="actcontent">
+        <ul class="ui-grid-halve">
+            <li ng-repeat="(key, rowData) in votedata" >
+                <div class="ui-grid-halve-con">
+                    <ul class="ui-list ui-border-tb">
+                        <li>
+                            <div class="ui-avatar" ng-click="gotoUrl(rowData)">
+                                <span style="background-image:url({{rowData.imgurl}})"></span>
+                            </div>
+                            <div class="ui-list-info">
+                                <h4 ng-if="!languageEn" class="ui-nowrap">{{rowData.name}}</h4>
+                                <h4 ng-if="languageEn" class="ui-nowrap">{{rowData.nameEn}}</h4>
+                                <div ng-if="!languageEn" class="ui-company ui-nowrap">{{rowData.company}}</div>
+                                <div ng-if="languageEn" class="ui-company h22">{{rowData.companyEn}}</div>
+                                <p class="ui-nowrap mt5"><span class="num">{{rowData.count}}</span>&nbsp;<span ng-if="!languageEn">个赞</span><span ng-if="languageEn">like</span></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <h4 ng-if="!languageEn">{{rowData.introduce}}</h4>
+                <h4 ng-if="languageEn" class="h68">{{rowData.introduceEn}}</h4>
+                <p class="ui-btn-wrap">
+                   <button class="ui-btn border-left" ng-show="!checkEmail(rowData)"  ng-click="checkCount(key)"><img src="http://7xt3kg.com1.z0.glb.clouddn.com/rose.png" class="flowers" /> <span ng-if="!languageEn">点赞</span><span ng-if="languageEn">Like</span></button>
+                   <button ng-show="checkEmail(rowData)" class="ui-btn border-left" disabled ><img src="http://7xt3kg.com1.z0.glb.clouddn.com/rosed.png" class="flowers" /> <span ng-if="!languageEn">已赞</span><span ng-if="languageEn">Liked</span></button>
+                   <button class="ui-btn border-right" ng-if="!languageEn"  ng-click="gotoUrl(rowData)" >对她说</button>
+                   <button class="ui-btn border-right" ng-if="languageEn"  ng-click="gotoUrl(rowData)" >Comment</button>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="!languageEn" class="tishi_intro">
+        <h4>投票规则</h4>
+        <p>1、投票时间：2016年5月20日- 2016年5月31日</p>
+        <p>2、每位同学限投5票，但不能同时投给同一位候选人</p>
+        <p>3、投票数最高即为最终获胜者</p>
+    </div>
+    <div ng-if="languageEn" class="tishi_intro">
+        <h4>Voting Rules</h4>
+        <p>1.Voting time: May 20, 2016 - May 31, 2016 </p>
+        <p>2.Every voter can have 5 tickets at most, with each for different candidate.</p>
+        <p>3.The winner will be decided based on the voting number.</p>
+    </div>
+    <div class="globalization"><span ng-class="{'selected': languageEn}" ng-click="changeLanuage('en_us')">En</span><span ng-class="{'selected': !languageEn}" ng-click="changeLanuage('zh-cn')">中文</span></div>
+</div>
+<script type="text/javascript">
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 10 * (clientWidth / 320) + 'px';
+                };
+
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+</script>
+
+</body>
+</html>
