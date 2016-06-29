@@ -28,7 +28,7 @@ function isPC() {
 function auto_login(){
  	$.ajax({
 		type:"post",
-		url:"http://jz.fosun.com/login",
+		url:"/login",
 		data:{
 			'username': email,
 			'password': "\x46\x6f\x73\x75\x6e\x40\x30\x39\x30\x31\x21"
@@ -55,7 +55,7 @@ function uuid() {
 function is_smlogin(){
 	$.ajax({
 		type:"post",
-		url:"http://jz.fosun.com/api/ns/getsmlogin?tt="+uuid(),
+		url:"/api/ns/getsmlogin?tt="+uuid(),
 		data:{
 			'timestamp': timestamp
 		},
@@ -83,7 +83,7 @@ function sm_auto_login(user){
 	}
 	$.ajax({
 		type:"post",
-		url:"http://jz.fosun.com/api/ns/login",
+		url:"/api/ns/login",
 		data:user,
 		success:function(data){
 			if(data){
@@ -101,7 +101,7 @@ function go_url(){
 		$.ajax({
 			type:"get",
 			async:true,
-			url:"http://jz.fosun.com/api/ns/language?email="+email+"&language="+language_type,
+			url:"/api/ns/language?email="+email+"&language="+language_type,
 			dataType:"json",
 			success:function(data){
 				if(!data){
@@ -114,7 +114,7 @@ function go_url(){
     if(str){
         location.replace(window.encodeURI(str));
     }else{
-        location.replace("http://jz.fosun.com/");
+        location.replace("/");
     }
 }
 $(function(){
@@ -128,7 +128,7 @@ $(function(){
 	}
 	$.ajax({
 		type:"get",
-		url:"http://jz.fosun.com/api",
+		url:"/api",
 		async:true,
 		dataType:"json",
 		success:function(data){
@@ -145,7 +145,7 @@ $(function(){
 		$('body').css("background-color","#f3f3f3")
 		$(document).attr("title","PC扫码登录");
 		timestamp=uuid();
-		var url="http://jz.fosun.com/vendor/sm.html?timestamp="+timestamp;
+		var url="/vendor/sm.html?timestamp="+timestamp;
 		$("#code-image").qrcode({
 			text:url
 		});
@@ -183,7 +183,7 @@ $(function(){
 			}
 			$.ajax({
 				type:"post",
-				url:"http://jz.fosun.com/api/ns/login",
+				url:"/api/ns/login",
 				data:{
 					'username': a,
 					'email': email,
